@@ -45,7 +45,7 @@ public class DeptController {
 	private final SysDeptService sysDeptService;
 
 	/**
-	 * 通过ID查询
+	 * 通过ID查 询
 	 * @param id ID
 	 * @return SysDept
 	 */

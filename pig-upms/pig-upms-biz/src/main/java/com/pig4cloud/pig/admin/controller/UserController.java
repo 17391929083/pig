@@ -60,7 +60,7 @@ public class UserController {
 	}
 
 	/**
-	 * 获取指定用户全部信息
+	 * 获取指定用户全部信息，通过username获取
 	 * @return 用户信息
 	 */
 	@Inner
@@ -70,6 +70,7 @@ public class UserController {
 		if (user == null) {
 			return R.failed(String.format("用户信息为空 %s", username));
 		}
+		//获取用户所携带的角色和菜单
 		return R.ok(userService.getUserInfo(user));
 	}
 
@@ -144,6 +145,7 @@ public class UserController {
 	}
 
 	/**
+	 * 通过用户名查询用户信息
 	 * 修改个人信息
 	 * @param userDto userDto
 	 * @return success/false

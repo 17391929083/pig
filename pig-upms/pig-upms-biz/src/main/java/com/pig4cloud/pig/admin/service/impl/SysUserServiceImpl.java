@@ -121,7 +121,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	 */
 	@Override
 	public IPage getUserWithRolePage(Page page, UserDTO userDTO) {
-		return baseMapper.getUserVosPage(page, userDTO);
+		IPage<List<UserVO>> userVosPage = baseMapper.getUserVosPage(page, userDTO);
+        return userVosPage;
 	}
 
 	/**
@@ -142,6 +143,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Override
 	@CacheEvict(value = CacheConstants.USER_DETAILS, key = "#sysUser.username")
 	public Boolean removeUserById(SysUser sysUser) {
+		//删除用户和角色的关系
 		sysUserRoleService.removeRoleByUserId(sysUser.getUserId());
 		this.removeById(sysUser.getUserId());
 		return Boolean.TRUE;
@@ -150,8 +152,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Override
 	@CacheEvict(value = CacheConstants.USER_DETAILS, key = "#userDto.username")
 	public Boolean updateUserInfo(UserDTO userDto) {
+		//通过用户名查询用户信息（含有角色信息）
 		UserVO userVO = baseMapper.getUserVoByUsername(userDto.getUsername());
-
+        //对比密码是否相同
 		Assert.isTrue(ENCODER.matches(userDto.getPassword(), userVO.getPassword()), "原密码错误，修改失败");
 
 		SysUser sysUser = new SysUser();
